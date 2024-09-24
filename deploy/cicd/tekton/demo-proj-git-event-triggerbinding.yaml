@@ -1,0 +1,7 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  creationTimestamp: null
+  name: demo-proj-git-event
+spec: {}
+status: {}
