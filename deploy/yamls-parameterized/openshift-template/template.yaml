@@ -1,0 +1,91 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: demo-proj-template
+  generatename: ""
+  namespace: ""
+  selflink: ""
+  uid: ""
+  resourceversion: ""
+  generation: 0
+  creationtimestamp: "0001-01-01T00:00:00Z"
+  deletiontimestamp: null
+  deletiongraceperiodseconds: null
+  labels: {}
+  annotations: {}
+  ownerreferences: []
+  finalizers: []
+  zzz_deprecatedclustername: ""
+  managedfields: []
+objects:
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      creationTimestamp: null
+      labels:
+        move2kube.konveyor.io/service: spring-petclinic
+      name: spring-petclinic
+    spec:
+      ports:
+        - name: port-8080
+          port: 8080
+          targetPort: 8080
+      selector:
+        move2kube.konveyor.io/service: spring-petclinic
+      type: ClusterIP
+    status:
+      loadBalancer: {}
+  - apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      creationTimestamp: null
+      labels:
+        move2kube.konveyor.io/service: demo-proj
+      name: demo-proj
+    spec:
+      rules:
+        - host: demo-proj.com
+          http:
+            paths:
+              - backend:
+                  service:
+                    name: spring-petclinic
+                    port:
+                      name: port-8080
+                path: /spring-petclinic
+                pathType: Prefix
+    status:
+      loadBalancer: {}
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      creationTimestamp: null
+      labels:
+        move2kube.konveyor.io/service: spring-petclinic
+      name: spring-petclinic
+    spec:
+      replicas: ${{COMMON_REPLICAS}}
+      selector:
+        matchLabels:
+          move2kube.konveyor.io/service: spring-petclinic
+      strategy: {}
+      template:
+        metadata:
+          creationTimestamp: null
+          labels:
+            move2kube.konveyor.io/service: spring-petclinic
+          name: spring-petclinic
+        spec:
+          containers:
+            - image: quay.io/demo-proj/spring-petclinic:latest
+              imagePullPolicy: Always
+              name: spring-petclinic
+              ports:
+                - containerPort: 8080
+              resources: {}
+          restartPolicy: Always
+          securityContext: {}
+    status: {}
+parameters:
+  - name: COMMON_REPLICAS
+    value: "2"
