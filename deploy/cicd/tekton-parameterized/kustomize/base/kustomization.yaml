@@ -1,0 +1,12 @@
+resources:
+  - demo-proj-tekton-triggers-admin-role.yaml
+  - demo-proj-tekton-triggers-admin-serviceaccount.yaml
+  - demo-proj-git-event-triggerbinding.yaml
+  - demo-proj-git-repo-eventlistener.yaml
+  - demo-proj-image-registry-secret.yaml
+  - demo-proj-ingress.yaml
+  - demo-proj-run-clone-build-push-triggertemplate.yaml
+  - demo-proj-clone-build-push-pipeline.yaml
+  - demo-proj-clone-push-serviceaccount.yaml
+  - demo-proj-git-repo-github-com-secret.yaml
+  - demo-proj-tekton-triggers-admin-rolebinding.yaml
